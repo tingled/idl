@@ -57,13 +57,17 @@ class Control():
                 sleep(5)
                 self.instance.update()
 
+    def instance_info(self):
+        print('instance state: {}'.format(self.instance.state))
+        print('instance ip: {}'.format(self.instance.private_ip_address))
+
 
 def init_logging(args):
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.WARNING)
+    level = logging.INFO
+    logger.setLevel(level)
     log_format = "%(asctime)s -  %(message)s"
     formatter = logging.Formatter(log_format)
-    level = logging.INFO
 
     if args.log_file:
         handler = logging.FileHandler(args.log_file)
@@ -83,6 +87,10 @@ def stop_main(args):
     return Control(args.settings).stop_instance()
 
 
+def info_main(args):
+    return Control(args.settings).instance_info()
+
+
 def parse_args():
     parent_parser = argparse.ArgumentParser(add_help=False)
     parent_parser.add_argument(
@@ -92,14 +100,14 @@ def parse_args():
     parent_parser.add_argument('-l', '--log-file', help='output log file')
 
     sp = parent_parser.add_subparsers(title='commands')
-    start = sp.add_parser(
-        'start', help='start the instance', parents=[parent_parser]
-    )
+    start = sp.add_parser('start', help='start the instance')
     start.set_defaults(func=start_main)
 
-    stop = sp.add_parser('stop', help='stop the instance',
-                         parents=[parent_parser])
+    stop = sp.add_parser('stop', help='stop the instance')
     stop.set_defaults(func=stop_main)
+
+    info = sp.add_parser('info', help='info about the instance')
+    info.set_defaults(func=info_main)
 
     return parent_parser.parse_args()
 
