@@ -1,0 +1,53 @@
+# RNNs Part 2
+
+## Exam hints
+- Start with most important points
+- Be concise and precise
+- Be prepared to use sketches
+- Go from higher level to details
+- Answer the question you are being asked
+
+## Exam Questions
+- What makes RNNs stand out from other network architectures?
+    - Recurrent connections, relating layers through time
+    - Special training methods:
+        - BPTT
+    - Weight sharing through time
+- What is the difference b/w a 1D CNN and an RNN
+    - CNNs use a fixed window
+        - Stateless, so the window can be computed in isolation
+    - RNNs use the entire history
+        - Has memory
+- What is "back-propagation through time"?
+    - Unroll the computational graph and trace gradiant
+- Which problems can typically occur during RNN training and why?
+    - Exploding / vanishing gradiant
+        - Caused by repeated multiplication of weight matrix
+        - Some remdies:
+            - Gradiant clipping
+            - Adam optimizer helps for vanishing gradiants
+            - Skip connections
+            - Gated architectures
+                - Help by preserving history longer
+    - Slow
+        -  Can parallelize through teacher forcing
+- How do RNNs generalize to Recursive Neural Networks?
+    - Recursive Neural Networks
+        - Share weights over a structure
+        - Think binary tree structure with two weight matrices
+    - In an RNN, the tree is just a chain. So RNNs are just a speical case of a Recursive NN
+- What is "Teacher Forcing"? Discuss advantages and problems
+    - Model has output -> hidden connection
+    - Instead of using the predicted output at `t-1`, use label of y at `t-1`
+    - Allows you to parallelize
+    - Once downside is that the predicted values may look quite different from labels
+        - Here you can randomly select which to use (y^ or y)
+- What is an LSTM and how does it address the challenge of learning long term dependencies?
+    - Addresses the problem of vanishing gradiants
+    - "Self loop" to preserve long term state
+    - Gates that control access to long term state
+    - "forget gate"
+        - How much of the state should be preserved
+    - Input and Output gates
+- Forget gate in an LSTM uses a sigmoid function on the linear transformation of the hidden layer and a new input. Could another activation be usedas well?
+    - Yes, but you need a function that is bounded by (0, 1), otherwise the semantics of the "gates" break down
